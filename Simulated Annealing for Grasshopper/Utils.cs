@@ -61,6 +61,18 @@ namespace Simulated_Annealing_for_Grasshopper
             return new State(vv);
         }
 
+        public static State SampleCauchy(State previousState, double learn_rate, double T)
+        {
+            List<double> vv = new List<double>();
+            for (int i = 0; i < previousState.Dim; ++i)
+            {
+                double u = (random.NextDouble() - 0.5) * Math.PI;
+                double xc = learn_rate * T * Math.Tan(u);
+                vv.Add(previousState.Values[i] + xc);
+            }
+            return new State(vv);
+        }
+
         /// <summary>
         /// Increment state1 by state2
         /// </summary>
