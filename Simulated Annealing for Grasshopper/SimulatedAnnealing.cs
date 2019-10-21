@@ -12,18 +12,20 @@ namespace Simulated_Annealing_for_Grasshopper
     {
         private static Random random= new Random(23);
 
-        private int maxK = 1000;
+        private int maxK = 500;
+        private int dwell = 3;  // TODO: reconsider this (250)
+
+        private int dimensions = 25;
 
         private double upper = 1.0;
-        private double lower = -1.0;
+        private double lower = 0.0;
         // estimate starting Temperature as 1.2 times the largest cost-function deviation over random points
         // in the box-shaped region specified by the lower, upper input parameters
         private double T = 0;
         private double T0;
-        private double learn_rate = 0.5;  // scipy defaul from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
+        private double learn_rate = 0.6;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
         private double k_boltzmann = 1.0; // scipy default
         private double Tfinal = Math.Pow(10, -12);
-        private int dwell = 50;  // TODO: reconsider this (250)
 
         private double energy_old;
         private double energy_new;
@@ -46,7 +48,7 @@ namespace Simulated_Annealing_for_Grasshopper
             List<double> randomPerformances = new List<double>();
             for (int i = 0; i < 10; ++i)
             {
-                State s = State.SampleUniform(lower, upper, 2);
+                State s = State.SampleUniform(lower, upper, dimensions);
                 double e = Utils.evaluate(s);
                 randomStates.Add(s);
                 randomPerformances.Add(e);
@@ -90,7 +92,7 @@ namespace Simulated_Annealing_for_Grasshopper
                 {
 
                     // sample new state using Boltzmann schedule
-                    double std = Math.Min(Math.Sqrt(T), (upper - lower) / (3 * learn_rate));
+                    double std = Math.Min(Math.Sqrt(T), (upper - lower) / (5 * learn_rate));  // TODO: this was 3, changed to 5 to make steps smaller
                     State y = state_old.SampleNormal(0, std);
                     State state_new = State.Add(state_old, State.Scale(y, learn_rate));
                     state_new.ClampState(lower, upper);  // TODO: this might prove tricky, check later if it causes algo to get stuck on boundaries

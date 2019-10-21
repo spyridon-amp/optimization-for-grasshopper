@@ -11,23 +11,11 @@ namespace Simulated_Annealing_for_Grasshopper
     {
         static void Main()
         {
-           SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+            SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
             double best = simulatedAnnealing.Run();
             Console.WriteLine(format: "optimal result: {0}", arg0: best.ToString());
 
-            string outMessage = JsonConvert.SerializeObject(new DataExchange(new List<double> { best }, 0, 0));
-            string response = SynchronousClientSocket.RequestResponse(11000, outMessage);
-            Console.WriteLine(response);
-
-            try
-            {
-                DataExchange incoming = JsonConvert.DeserializeObject<DataExchange>(response);
-                Console.WriteLine(incoming.values.ToString());
-            }
-            catch
-            {
-                Console.WriteLine( "Unexpected data format received");
-            }
+            Console.WriteLine("break here for inspection");
         }
     }
 
