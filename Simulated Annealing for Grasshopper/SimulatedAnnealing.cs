@@ -12,8 +12,8 @@ namespace Simulated_Annealing_for_Grasshopper
     {
         private static Random random= new Random(23);
 
-        private int maxK = 500;
-        private int dwell = 3;  // TODO: reconsider this (250)
+        private int maxK = 400;
+        private int dwell = 5;  // TODO: reconsider this (20) in https://github.com/CISMM/SimulatedAnnealing/blob/master/siman.cxx
 
         private int dimensions = 25;
 
@@ -24,7 +24,7 @@ namespace Simulated_Annealing_for_Grasshopper
         private double T = 0;
         private double T0;
         private double tscale = 1.0; // maybe 0.1 according to https://github.com/CISMM/SimulatedAnnealing/blob/master/siman.cxx
-        private double learn_rate = 0.6;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
+        private double learn_rate = 0.5;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
         private double k_boltzmann = 1.0; // scipy default
         private double Tfinal = Math.Pow(10, -12);
 
