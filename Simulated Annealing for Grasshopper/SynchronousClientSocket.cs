@@ -35,8 +35,7 @@ namespace Simulated_Annealing_for_Grasshopper
                 {
                     sender.Connect(remoteEP);
 
-                    Console.WriteLine("Socket connected to {0}",
-                        sender.RemoteEndPoint.ToString());
+                    //Console.WriteLine("Socket connected to {0}", sender.RemoteEndPoint.ToString());
 
                     // Encode the data string into a byte array.  
                     byte[] msg = Encoding.ASCII.GetBytes(message + "<EOF>"); 
@@ -47,7 +46,7 @@ namespace Simulated_Annealing_for_Grasshopper
                     // Receive the response from the remote device.  
                     int bytesRec = sender.Receive(bytes);
                     string IncomingMessage = Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                    Console.WriteLine("Received = {0}", IncomingMessage);
+                    //Console.WriteLine("Received = {0}", IncomingMessage);
 
                     // Release the socket.  
                     sender.Shutdown(SocketShutdown.Both);

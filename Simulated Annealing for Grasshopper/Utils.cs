@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -132,9 +133,23 @@ namespace Simulated_Annealing_for_Grasshopper
             //return (state.Values[0] + state.Values[1]) * (state.Values[0] + state.Values[1]);
             double x1 = state.Values[0];
             double x2 = state.Values[1];
-
+            double result = Double.NaN;
             // performance function from: http://apmonitor.com/me575/index.php/Main/SimulatedAnnealing
-            return 0.2 + x1 * x1 + x2 * x2 - 0.1 * Math.Cos(6 * Math.PI * x1) - 0.1 * Math.Cos(6 * Math.PI * x2);
+            //return 0.2 + x1 * x1 + x2 * x2 - 0.1 * Math.Cos(6 * Math.PI * x1) - 0.1 * Math.Cos(6 * Math.PI * x2);
+
+            string outMessage = JsonConvert.SerializeObject(new DataExchange(new List<double> { x1, x2 }, 0, 0));
+            string response = SynchronousClientSocket.RequestResponse(11000, outMessage);
+
+            try
+            {
+                DataExchange incoming = JsonConvert.DeserializeObject<DataExchange>(response);
+                result = incoming.values[0];
+            }
+            catch
+            {
+                Console.WriteLine("Unexpected data format received");
+            }
+            return result;
         }
 
 
