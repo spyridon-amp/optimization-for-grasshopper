@@ -127,7 +127,7 @@ namespace Simulated_Annealing_for_Grasshopper
         /// </summary>
         /// <param name="state">State to evaluate</param>
         /// <returns>Performance of state</returns>
-        public double evaluate(State state)
+        public static double evaluate(State state)
         {
             //return (state.Values[0] + state.Values[1]) * (state.Values[0] + state.Values[1]);
             double x1 = state.Values[0];
