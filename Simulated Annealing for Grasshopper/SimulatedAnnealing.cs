@@ -14,6 +14,8 @@ namespace Simulated_Annealing_for_Grasshopper
 
         private int maxK = 400;
         private int dwell = 5;  // TODO: reconsider this (20) in https://github.com/CISMM/SimulatedAnnealing/blob/master/siman.cxx
+        private double tscale = 1.8; // maybe 0.1 according to https://github.com/CISMM/SimulatedAnnealing/blob/master/siman.cxx
+
 
         private int dimensions = 25;
 
@@ -23,9 +25,8 @@ namespace Simulated_Annealing_for_Grasshopper
         // in the box-shaped region specified by the lower, upper input parameters
         private double T = 0;
         private double T0;
-        private double tscale = 1.0; // maybe 0.1 according to https://github.com/CISMM/SimulatedAnnealing/blob/master/siman.cxx
-        private double learn_rate = 0.5;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
-        private double k_boltzmann = 1.0; // scipy default
+        private double learn_rate = 0.25;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
+        private double k_boltzmann = 0.5; // scipy default is 1.0
         private double Tfinal = Math.Pow(10, -12);
 
         private double energy_old;
@@ -87,25 +88,25 @@ namespace Simulated_Annealing_for_Grasshopper
             {
 
                 // update temperature using Boltzmann schedule
-                //T = T0 / Math.Log(1 + k, 2);
+                T = T0 / Math.Log(1 + k, 2);
 
                 //update temperature using Cauchy schedule
-                T = T0 / (1 + k * tscale);
+                //T = T0 / (1 + k * tscale);
 
                 for (int il = 0; il < dwell; ++il)
                 {
 
                     // sample new state using Boltzmann schedule
-                    /*double std = Math.Min(Math.Sqrt(T), (upper - lower) / (5 * learn_rate));  // TODO: this was 3, changed to 5 to make steps smaller
+                    double std = Math.Min(Math.Sqrt(T), (upper - lower) / (9 * learn_rate));  // TODO: this was 3, changed to 5 to make steps smaller
                     State y = state_old.SampleNormal(0, std);
                     State state_new = State.Add(state_old, State.Scale(y, learn_rate));
                     state_new.ClampState(lower, upper);  // TODO: this might prove tricky, check later if it causes algo to get stuck on boundaries
-                    */
+                    
 
                     // sample new state using Cauchy schedule
-                    State state_new = State.SampleCauchy(state_old, learn_rate, T);
+                    /*State state_new = State.SampleCauchy(state_old, learn_rate, T);
                     state_new.ClampState(lower, upper);  
-
+                    */
 
                     // then evaluate performance of the new state
                     // ... output current state to proceed
