@@ -66,7 +66,6 @@ namespace Simulated_Annealing_for_Grasshopper
                 {
                     Console.WriteLine("Unexpected exception : {0}", e.ToString());
                 }
-
             }
             catch (Exception e)
             {
