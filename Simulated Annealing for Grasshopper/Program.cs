@@ -15,7 +15,9 @@ namespace Simulated_Annealing_for_Grasshopper
             double best = simulatedAnnealing.Run();
             Console.WriteLine(format: "optimal result: {0}", arg0: best.ToString());
 
-            Console.WriteLine("break here for inspection");
+            Console.WriteLine("optimal state {0}", simulatedAnnealing.state_best.ToString());
+            Console.WriteLine("\nPress Enter to exit...");
+            Console.ReadLine();
         }
     }
 

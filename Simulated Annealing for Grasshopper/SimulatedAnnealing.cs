@@ -25,8 +25,8 @@ namespace Simulated_Annealing_for_Grasshopper
         // in the box-shaped region specified by the lower, upper input parameters
         private double T = 0;
         private double T0;
-        private double learn_rate = 0.25;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
-        private double k_boltzmann = 0.5; // scipy default is 1.0
+        private double learn_rate = 0.15;  // scipy defaul is 0.5 from: https://docs.scipy.org/doc/scipy-0.15.1/reference/generated/scipy.optimize.anneal.html
+        private double k_boltzmann = 0.2; // scipy default is 1.0
         private double Tfinal = Math.Pow(10, -12);
 
         private double energy_old;
@@ -75,7 +75,7 @@ namespace Simulated_Annealing_for_Grasshopper
             T = T0;
             energy_best = emin;
             energy_old = emin;
-            state_old = state_best;
+            state_old = new State((upper - lower)*0.5, dimensions);
             Console.WriteLine("Initial temperature: " + T0);
         }
 
@@ -98,7 +98,9 @@ namespace Simulated_Annealing_for_Grasshopper
 
                     // sample new state using Boltzmann schedule
                     double std = Math.Min(Math.Sqrt(T), (upper - lower) / (9 * learn_rate));  // TODO: this was 3, changed to 5 to make steps smaller
-                    State y = state_old.SampleNormal(0, std);
+                    //State y = state_old.SampleNormal(0, std);
+                    double drift = 1.0 - k / (4.0*maxK);
+                    State y = state_old.SampleNormalGalapagosInspired(0, std, drift);
                     State state_new = State.Add(state_old, State.Scale(y, learn_rate));
                     state_new.ClampState(lower, upper);  // TODO: this might prove tricky, check later if it causes algo to get stuck on boundaries
                     
@@ -147,7 +149,8 @@ namespace Simulated_Annealing_for_Grasshopper
                 } // end of inner loop over dwell
 
                 // break if system has cooled down
-                if (T <= Tfinal) break;
+                if (T <= Tfinal)
+                    break;
 
             }  // end of outer loop over maxK
         }

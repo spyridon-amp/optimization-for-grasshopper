@@ -21,6 +21,16 @@ namespace Simulated_Annealing_for_Grasshopper
             Dim = values.Count;
         }
 
+        public State(double value, int dim)
+        {
+            Values = new List<double>();
+            for (int i = 0; i < dim; ++i)
+            {
+                Values.Add(value);
+            }
+            Dim = dim;
+        }
+
         public State()
         {
             Values = new List<double>();
@@ -47,6 +57,53 @@ namespace Simulated_Annealing_for_Grasshopper
             {
                 vv.Add(Utils.SampleNormalDistribution(mean, stDev));
             }
+            return new State(vv);
+        }
+
+        public State SampleNormalGalapagosInspired(double mean, double stDev, double drift)
+        {
+            List<double> vv = new List<double>();
+            List<double> newSamples = new List<double>();
+
+            // first sample 1 to 4 values that will be updated
+            newSamples.Add(Utils.SampleNormalDistribution(mean, stDev));
+            if (random.NextDouble() < drift)
+            {
+                newSamples.Add(Utils.SampleNormalDistribution(mean, stDev));
+            }
+            for (int i = 0; i < 2; ++i)
+            {
+                if (random.NextDouble() < drift * drift)
+                {
+                    newSamples.Add(Utils.SampleNormalDistribution(mean, stDev));
+                }
+            }
+            for (int i = 0; i < Dim - 4; ++i)
+            {
+                if (random.NextDouble() < drift * drift *drift)
+                {
+                    newSamples.Add(Utils.SampleNormalDistribution(mean, stDev));
+                }
+            }
+
+            for (int i = 0; i < Dim; ++i)
+            {
+                vv.Add(0.0);
+            }
+
+            // generate random positions and place samples
+            List<int> positions = new List<int>();
+            for (int i = 0; i < newSamples.Count; ++i)
+            {
+                int position = random.Next(Dim);
+                while (positions.Contains(position))
+                {
+                    position = random.Next(Dim);
+                }
+                vv[position] = newSamples[i];
+                positions.Add(position);
+            }
+
             return new State(vv);
         }
 
