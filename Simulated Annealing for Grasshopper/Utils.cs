@@ -9,7 +9,7 @@ namespace Simulated_Annealing_for_Grasshopper
 {
     class State
     {
-        private static Random random = new Random(23);
+        private static Random random = new Random(42);
 
         public List<double> Values { get; private set; }
         public int Dim { get; private set; }
@@ -190,7 +190,7 @@ namespace Simulated_Annealing_for_Grasshopper
 
         }
 
-        private static Random random = new Random(23);
+        private static Random random = new Random(42);
 
         /// <summary>
         /// Performance function
@@ -206,7 +206,7 @@ namespace Simulated_Annealing_for_Grasshopper
             //return 0.2 + x1 * x1 + x2 * x2 - 0.1 * Math.Cos(6 * Math.PI * x1) - 0.1 * Math.Cos(6 * Math.PI * x2);
 
             string outMessage = JsonConvert.SerializeObject(new DataExchange(state.Values, 0, 0));
-            string response = SynchronousClientSocket.RequestResponse(11000, outMessage);
+            string response = SynchronousClientSocket.RequestResponse(outMessage);
 
             try
             {

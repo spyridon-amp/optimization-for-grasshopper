@@ -11,11 +11,27 @@ namespace Simulated_Annealing_for_Grasshopper
     {
         static void Main()
         {
-            SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+            for (int volume = 0; volume < 2; ++volume)
+            {
+                for (int combination = 0; combination < 40; ++combination)
+                {
+                    SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+                    // update context
+                    // TODO: make a nicer way of sending this message instead of repurposing this list
+                    string message = JsonConvert.SerializeObject(new DataExchange(new List<double> { volume, combination }, 0, 0));
+                    SynchronousClientSocket.SendNoResponse(message);
+                    double best = simulatedAnnealing.Run();
+
+                }
+            }
+
+
+            /*SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
             double best = simulatedAnnealing.Run();
             Console.WriteLine(format: "optimal result: {0}", arg0: best.ToString());
 
             Console.WriteLine("optimal state {0}", simulatedAnnealing.state_best.ToString());
+            */
             Console.WriteLine("\nPress Enter to exit...");
             Console.ReadLine();
         }
