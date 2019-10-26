@@ -10,9 +10,9 @@ namespace Simulated_Annealing_for_Grasshopper
     // other reference: https://www.gnu.org/software/gsl/doc/html/siman.html
     class SimulatedAnnealing
     {
-        private static Random random= new Random(23);
+        private static Random random= new Random(42);
 
-        private int maxK = 400;
+        private int maxK = 800;
         private int dwell = 5;  // TODO: reconsider this (20) in https://github.com/CISMM/SimulatedAnnealing/blob/master/simann.cxx
         private double tscale = 1.8; // maybe 0.1 according to https://github.com/CISMM/SimulatedAnnealing/blob/master/simann.cxx
 
@@ -43,7 +43,12 @@ namespace Simulated_Annealing_for_Grasshopper
 
         }
 
-        public SimulatedAnnealing(int randomSeed)
+        public SimulatedAnnealing(int dims)
+        {
+            dimensions = dims;
+        }
+
+        public void RandomSeed(int randomSeed)
         {
             random = new Random(randomSeed);
         }
