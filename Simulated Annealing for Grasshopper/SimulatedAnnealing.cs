@@ -12,10 +12,10 @@ namespace Simulated_Annealing_for_Grasshopper
     {
         private static Random random= new Random(42);
 
-        private int maxK = 800;
+        private int maxK = 1200;
         private int dwell = 5;  // TODO: reconsider this (20) in https://github.com/CISMM/SimulatedAnnealing/blob/master/simann.cxx
         private double tscale = 1.8; // maybe 0.1 according to https://github.com/CISMM/SimulatedAnnealing/blob/master/simann.cxx
-
+        private int step = 2;
 
         private int dimensions = 25;
 
@@ -94,7 +94,7 @@ namespace Simulated_Annealing_for_Grasshopper
             double performance;
 
             // iteration of outer loop
-            for (int k = 1; k <= maxK; k += 2)
+            for (int k = 1; k <= maxK; k += step)
             {
 
                 // update temperature using Boltzmann schedule
