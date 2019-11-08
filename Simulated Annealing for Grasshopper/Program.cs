@@ -48,13 +48,12 @@ namespace Simulated_Annealing_for_Grasshopper
             }
 
             SynchronousClientSocket.port = port;
-            int dimensions = 25;
 
             for (int volume = vol_from; volume < vol_to; ++volume)
             {
                 for (int combination = combination_from; combination < combination_to; ++combination)
                 {
-                    SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(dimensions);
+                    SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
                     // update context
                     // TODO: make a nicer way of sending this message instead of repurposing this list
                     string message = JsonConvert.SerializeObject(new DataExchange(new List<double> { volume, combination }, 0, 0));
