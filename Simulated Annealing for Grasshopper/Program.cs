@@ -16,6 +16,7 @@ namespace Simulated_Annealing_for_Grasshopper
             int vol_to;
             int combination_from;
             int combination_to;
+            int dimensions = 25;
 
             // Test if input arguments were supplied.
             if (args.Length == 0)
@@ -26,7 +27,7 @@ namespace Simulated_Annealing_for_Grasshopper
                 combination_from = 0;
                 combination_to = 0;
             }
-            else if (args.Length == 5)
+            else if (args.Length == 5 || args.Length == 6)
             {
                 // Try to convert the input arguments to numbers. This will throw
                 // an exception if the argument is not a number.
@@ -34,10 +35,16 @@ namespace Simulated_Annealing_for_Grasshopper
                 success = int.TryParse(args[1], out vol_from) && success;
                 success = int.TryParse(args[2], out vol_to) && success;
                 success = int.TryParse(args[3], out combination_from) && success;
-                bool success_comb = int.TryParse(args[4], out combination_to) && success;
+                success = int.TryParse(args[4], out combination_to) && success;
+
+                if (args.Length == 6)
+                {
+                    success = int.TryParse(args[5], out dimensions) && success;
+                }
+
                 if (!success)
                 {
-                    Console.WriteLine("Error in input arguments, need: [port, vol_from, vol_to, combination_from, combination_to");
+                    Console.WriteLine("Error in input arguments, need: port, vol_from, vol_to, combination_from, combination_to, [optional: dimensions]");
                     return 1;
                 }
             }
@@ -48,7 +55,7 @@ namespace Simulated_Annealing_for_Grasshopper
             }
 
             SynchronousClientSocket.port = port;
-            int dimensions = 25;
+            
 
             for (int volume = vol_from; volume < vol_to; ++volume)
             {
