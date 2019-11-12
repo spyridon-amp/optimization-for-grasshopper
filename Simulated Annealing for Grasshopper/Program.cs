@@ -9,28 +9,59 @@ namespace Simulated_Annealing_for_Grasshopper
 {
     class Program
     {
-        static void Main()
+        static int Main(String[] args)
         {
-            SynchronousClientSocket.SendNoResponse(JsonConvert.SerializeObject(new DataExchange(new List<double> { -1, -1 }, 0, 0)));
-            SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
-            double best = simulatedAnnealing.Run();
-            SynchronousClientSocket.SendNoResponse(JsonConvert.SerializeObject(new DataExchange(new List<double> { best }, 0, 0)));
+            int port;
+            int vol_from;
+            int vol_to;
+            int combination_from;
+            int combination_to;
+            int dimensions = 25;
 
-            Console.WriteLine(format: "optimal result: {0}", arg0: best.ToString());
-            Console.WriteLine("optimal state {0}", simulatedAnnealing.state_best.ToString());
-            
-            Console.WriteLine("\nPress Enter to exit...");
-            Console.ReadLine();
-        }
-
-        private static void OptimizeCombinations()
-        {
-            for (int volume = 0; volume < 2; ++volume)
+            // Test if input arguments were supplied.
+            if (args.Length == 0)
             {
-                for (int combination = 0; combination < 40; ++combination)
+                port = 11000;
+                vol_from = 0;
+                vol_to = 0;
+                combination_from = 0;
+                combination_to = 0;
+            }
+            else if (args.Length == 5 || args.Length == 6)
+            {
+                // Try to convert the input arguments to numbers. This will throw
+                // an exception if the argument is not a number.
+                bool success = int.TryParse(args[0], out port);
+                success = int.TryParse(args[1], out vol_from) && success;
+                success = int.TryParse(args[2], out vol_to) && success;
+                success = int.TryParse(args[3], out combination_from) && success;
+                success = int.TryParse(args[4], out combination_to) && success;
+
+                if (args.Length == 6)
                 {
-                    if (volume == 0 && combination <= 17) { continue; }
-                    SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+                    success = int.TryParse(args[5], out dimensions) && success;
+                }
+
+                if (!success)
+                {
+                    Console.WriteLine("Error in input arguments, need: port, vol_from, vol_to, combination_from, combination_to, [optional: dimensions]");
+                    return 1;
+                }
+            }
+            else
+            {
+                Console.WriteLine("Wrong number of arguments");
+                return 1;
+            }
+
+            SynchronousClientSocket.port = port;
+            
+
+            for (int volume = vol_from; volume < vol_to; ++volume)
+            {
+                for (int combination = combination_from; combination < combination_to; ++combination)
+                {
+                    SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(dimensions);
                     // update context
                     // TODO: make a nicer way of sending this message instead of repurposing this list
                     string message = JsonConvert.SerializeObject(new DataExchange(new List<double> { volume, combination }, 0, 0));
@@ -38,12 +69,22 @@ namespace Simulated_Annealing_for_Grasshopper
                     double best = simulatedAnnealing.Run();
                     message = JsonConvert.SerializeObject(new DataExchange(new List<double> { best }, 0, 0));
                     SynchronousClientSocket.SendNoResponse(message);
-
                 }
             }
+
+
+            /*SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing();
+            double best = simulatedAnnealing.Run();
+            Console.WriteLine(format: "optimal result: {0}", arg0: best.ToString());
+
+            Console.WriteLine("optimal state {0}", simulatedAnnealing.state_best.ToString());
+            */
+            Console.WriteLine("\nPress Enter to exit...");
+            Console.ReadLine();
+
+            return 0;
         }
     }
-
 
     class DataExchange
     {
