@@ -23,9 +23,9 @@ namespace Simulated_Annealing_for_Grasshopper
             {
                 port = 11000;
                 vol_from = 0;
-                vol_to = 0;
+                vol_to = 1;
                 combination_from = 0;
-                combination_to = 0;
+                combination_to = 1;
             }
             else if (args.Length == 5 || args.Length == 6)
             {
