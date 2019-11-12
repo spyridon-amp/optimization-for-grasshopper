@@ -44,13 +44,13 @@ namespace Simulated_Annealing_for_Grasshopper
 
                 if (!success)
                 {
-                    Console.WriteLine("Error in input arguments, need: port, vol_from, vol_to, combination_from, combination_to, [optional: dimensions]");
+                    Console.WriteLine("Wrong type of input arguments, need: port, vol_from, vol_to, combination_from, combination_to, [optional: dimensions]");
                     return 1;
                 }
             }
             else
             {
-                Console.WriteLine("Wrong number of arguments");
+                Console.WriteLine("Wrong number of arguments, need: port, vol_from, vol_to, combination_from, combination_to, [optional: dimensions]");
                 return 1;
             }
 
